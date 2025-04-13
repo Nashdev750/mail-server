@@ -1,10 +1,9 @@
-FROM alpine:3.18
+FROM debian:bullseye-slim
 
-RUN apk add --no-cache postfix cyrus-sasl cyrus-sasl-plain bash
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y postfix libsasl2-modules sasl2-bin mailutils && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY postfix/main.cf /etc/postfix/main.cf
 
-RUN mkdir -p /var/spool/postfix /var/mail && \
-    chown -R postfix:postfix /var/spool/postfix /var/mail
-
-CMD ["sh", "-c", "postfix start-fg"]
+CMD ["postfix", "start-fg"]
