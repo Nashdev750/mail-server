@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  postfix:
+    build: .
+    container_name: postfix
+    hostname: mail.typingsprint.com
+    ports:
+      - "25:25"
+    environment:
+      - MAILNAME=mail.typingsprint.com
+    restart: unless-stopped

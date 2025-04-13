@@ -1,0 +1,17 @@
+myhostname = mail.typingsprint.com
+mydomain = typingsprint.com
+myorigin = $mydomain
+inet_interfaces = all
+inet_protocols = ipv4
+mydestination = 
+relayhost = 
+home_mailbox = Maildir/
+smtpd_banner = $myhostname ESMTP TypingSprint Mail
+
+# Allow only trusted/local clients for now
+smtpd_recipient_restrictions = permit_mynetworks permit_sasl_authenticated reject_unauth_destination
+
+# TLS support — uncomment after cert setup
+# smtpd_tls_cert_file=/etc/ssl/certs/mail.crt
+# smtpd_tls_key_file=/etc/ssl/private/mail.key
+# smtpd_use_tls=yes
