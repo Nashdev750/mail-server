@@ -7,6 +7,8 @@ services:
     hostname: mail.typingsprint.com
     ports:
       - "25:25"
-    environment:
-      - MAILNAME=mail.typingsprint.com
+      - "587:587"
+      - "465:465"
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     restart: unless-stopped
