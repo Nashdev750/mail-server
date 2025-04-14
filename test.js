@@ -1,23 +1,32 @@
 const nodemailer = require('nodemailer');
 
-async function sendTestEmail() {
-  const transporter = nodemailer.createTransport({
-    host: 'localhost',
-    port: 587,
-    secure: false, // STARTTLS
-    tls: {
-      rejectUnauthorized: false, // for local/self-signed certs
-    }
-  });
+const transporter = nodemailer.createTransport({
+  host: 'mail.typingsprint.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'apiuser',
+    pass: 'supersecret123'
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
 
-  const info = await transporter.sendMail({
-    from: 'test@typingsprint.com',
+async function sendEmail() {
+  await transporter.sendMail({
+    from: 'noreply@typingsprint.com',
     to: 'nashdev750@gmail.com',
-    subject: '🚀 Test Email from Your Custom SMTP Server',
-    text: 'This is a test email sent using your Node.js-based SMTP server!',
+    subject: 'Hello from your own SMTP!',
+    text: 'This is plain text.',
+    html: '<h2>This is HTML</h2><p>With some styling.</p>',
+    attachments: [
+      {
+        filename: 'hello.txt',
+        content: 'Hello world!'
+      }
+    ]
   });
 
-  console.log('✅ Test email sent:', info.response);
+  console.log('✅ Email sent!');
 }
-
-sendTestEmail().catch(console.error);
