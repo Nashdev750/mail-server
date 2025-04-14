@@ -30,3 +30,4 @@ async function sendEmail() {
 
   console.log('✅ Email sent!');
 }
+sendEmail()
