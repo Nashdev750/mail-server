@@ -41,8 +41,8 @@ router.post('/send-sandbox', async (req, res) => {
     return res.status(400).json({ error: 'to, subject, and text are required' });
   }
 
-  const defaultFrom = 'noreply@mail.typingsprint.com';
-  const dkim = await getDKIM('mail.typingsprint.com');
+  const defaultFrom = 'noreply@typingsprint.com';
+  const dkim = await getDKIM('typingsprint.com');
 
   if (!dkim) {
     return res.status(500).json({ error: 'Default DKIM not configured. Admin setup required.' });
