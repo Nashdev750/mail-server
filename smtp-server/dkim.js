@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const DKIMKey = require('../models/DKIMKey');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

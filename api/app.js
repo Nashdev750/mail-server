@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dkimRoutes = require('./dkimRoutes');
 const sendRoutes = require('./sendRoutes');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 const app = express();
 app.use(express.json());
