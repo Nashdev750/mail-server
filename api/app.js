@@ -9,8 +9,8 @@ app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI);
 
-app.use('/api', dkimRoutes);
-app.use('/api', sendRoutes);
+app.use('/emailflow/api', dkimRoutes);
+app.use('/emailflow/api', sendRoutes);
 
 const PORT = process.env.API_PORT || 3000;
 app.listen(PORT, () => {
