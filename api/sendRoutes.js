@@ -15,8 +15,8 @@ async function getDKIM(domain) {
   };
 }
 
-// ✉️ Shared Email Sender
-async function sendEmail({ from, to, subject, text, dkim }) {
+// ✉️ Enhanced Email Sender
+async function sendEmail({ from, to, subject, text, html, attachments, dkim }) {
   const recipientDomain = to.split('@')[1];
   const mxRecords = await dns.resolveMx(recipientDomain);
   const mxHost = mxRecords.sort((a, b) => a.priority - b.priority)[0].exchange;
@@ -29,16 +29,25 @@ async function sendEmail({ from, to, subject, text, dkim }) {
     dkim
   });
 
-  await transporter.sendMail({ from, to, subject, text });
+  const mailOptions = {
+    from,
+    to,
+    subject,
+    text,       // optional
+    html,       // optional
+    attachments // optional
+  };
+
+  await transporter.sendMail(mailOptions);
   return mxHost;
 }
 
 // 📤 Sandbox: Always use default domain and DKIM
 router.post('/send-sandbox', async (req, res) => {
-  const { to, subject, text } = req.body;
+  const { to, subject, text, html, attachments } = req.body;
 
-  if (!to || !subject || !text) {
-    return res.status(400).json({ error: 'to, subject, and text are required' });
+  if (!to || !subject || (!text && !html)) {
+    return res.status(400).json({ error: 'to, subject, and text or html are required' });
   }
 
   const defaultFrom = 'noreply@typingsprint.com';
@@ -54,6 +63,8 @@ router.post('/send-sandbox', async (req, res) => {
       to,
       subject,
       text,
+      html,
+      attachments,
       dkim
     });
     res.json({ success: true, relay, from: defaultFrom });
@@ -65,10 +76,10 @@ router.post('/send-sandbox', async (req, res) => {
 
 // 📤 Production: Uses user domain DKIM
 router.post('/send-production', async (req, res) => {
-  const { from, to, subject, text } = req.body;
+  const { from, to, subject, text, html, attachments } = req.body;
 
-  if (!to || !from || !subject || !text) {
-    return res.status(400).json({ error: 'from, to, subject, and text are required' });
+  if (!to || !from || !subject || (!text && !html)) {
+    return res.status(400).json({ error: 'from, to, subject, and text or html are required' });
   }
 
   const senderDomain = from.split('@')[1];
@@ -81,7 +92,15 @@ router.post('/send-production', async (req, res) => {
   }
 
   try {
-    const relay = await sendEmail({ from, to, subject, text, dkim });
+    const relay = await sendEmail({
+      from,
+      to,
+      subject,
+      text,
+      html,
+      attachments,
+      dkim
+    });
     res.json({ success: true, relay, from });
   } catch (err) {
     console.error(err);
