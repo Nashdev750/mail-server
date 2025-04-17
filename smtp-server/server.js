@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const dns = require('dns').promises;
 const fs = require('fs');
 const { getDKIM } = require('./dkim');
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 
 const AUTH_USER = 'apiuser';
 const AUTH_PASS = 'supersecret123';
